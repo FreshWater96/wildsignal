@@ -1,0 +1,39 @@
+WILDSIGNAL — The forest is listening
+An original browser wilderness expedition.
+
+ENVIRONMENT
+Terrain, forest layout, procedural trees, canopy art, grass, landmarks, equipment,
+flowers, fireflies, storm wisps, shaders and gameplay created for this game.
+
+SCANNED ASSETS — POLY HAVEN (CC0)
+Forest Floor — https://polyhaven.com/a/forest_floor
+Bark Brown 02 — https://polyhaven.com/a/bark_brown_02
+Mossy Rock — https://polyhaven.com/a/mossy_rock
+Fern 02 — https://polyhaven.com/a/fern_02
+Rock Moss Set 01 — https://polyhaven.com/a/rock_moss_set_01
+Asset license: https://polyhaven.com/license
+CC0: https://creativecommons.org/publicdomain/zero/1.0/
+Files are bundled locally; these assets do not require a third-party service to play.
+
+RENDERER
+Three.js r170 — https://threejs.org — MIT license.
+Copyright 2010-2024 Three.js Authors. Full license in vendor/LICENSE.txt.
+
+SOUND
+Original procedural ambient sound, birds, footsteps and signal effects generated
+in the browser with Web Audio. No external audio files.
+
+INSPIRATION
+Electric Dreams Environment by Epic Games:
+https://www.unrealengine.com/electric-dreams-environment
+Wildsignal is a separate browser game. It does not contain the Electric Dreams
+project, any of its UE-only assets, or the original 4 x 4 km level. It is not
+affiliated with or endorsed by Epic Games.
+
+GAMEPLAY
+Restore three relays, then hold E at Base Camp to transmit your rescue signal.
+Expedition mode: eight-minute deadline, storm wisps, survival resources.
+Wander mode: no time limit and no damage; all exploration and relay goals remain.
+Controls: WASD move; mouse or drag look; Shift sprint; Space jump; E interact;
+Q firefly pulse; F echo lure; M field map; P photo view; Escape pause.
+Progress and settings are saved in this browser's local storage.

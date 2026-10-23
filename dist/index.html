@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101e19">
+  <meta name="description" content="Follow the fireflies. Restore the forest. Find your way home. A playable 3D wilderness expedition.">
+  <title>Wildsignal — The forest is listening</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231b3028'/%3E%3Cpath d='m15 43 17-29 17 29H15m17-19v29' stroke='%23d9e4b7' fill='none' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+</head>
+<body>
+  <div id="world" aria-label="Interactive 3D forest"></div>
+  <div id="vignette"></div><div id="damage"></div><div id="pulse-screen"></div>
+  <div id="loading"><div class="signal-mark"><span></span><span></span><span></span></div><p>ENTERING THE WILD</p><small id="loading-label">Growing a world…</small><div class="loading-line"><i id="loading-progress"></i></div></div>
+
+  <main id="title-screen" class="hidden">
+    <header class="title-header"><a class="brand" href="./" aria-label="Wildsignal home"><span class="brand-icon">✳</span> WILDSIGNAL</a><span class="edition">AN INTERACTIVE FIELD EXPEDITION</span><button id="sound-top" class="icon-button" aria-label="Toggle sound">♫ <span>Sound on</span></button></header>
+    <section class="hero">
+      <p class="eyebrow"><span class="status-dot"></span> EXPEDITION 01 <span class="eyebrow-rule"></span> THE VERDANT BASIN</p>
+      <h1>THE FOREST<br>IS <em>LISTENING.</em></h1>
+      <p class="hero-copy">Something is waking beneath the canopy.<br>Follow the fireflies. Restore the lost signals.<br>Find your way home before the storm.</p>
+      <div class="mode-switch" role="group" aria-label="Game mode"><button class="selected" data-mode="expedition"><span>01</span> Expedition <small>Survive the storm</small></button><button data-mode="wander"><span>02</span> Wander <small>No clock. Just the wild.</small></button></div>
+      <div class="hero-actions"><button id="begin" class="primary">Begin expedition <span>↗</span></button><button id="continue" class="text-button hidden">Continue journey <span>→</span></button></div>
+      <p class="hero-meta"><span>FIRST PERSON EXPLORATION</span><i></i><span id="mode-description">8 MINUTES TO MAKE IT HOME</span></p>
+    </section>
+    <aside class="scene-label"><span class="tiny-label">LIVE FROM THE BASIN</span><span><i class="status-dot"></i> The forest is breathing</span><small>THREE LOST RELAYS. ONE WAY HOME.</small></aside>
+    <footer class="title-footer"><div><button id="guide-title">Field guide <span>↗</span></button><button id="settings-title">Settings <span>↗</span></button></div><p>LEAVE ONLY FOOTPRINTS.</p><button id="credits-title">About this world <span>↗</span></button></footer>
+  </main>
+
+  <div id="hud" class="hidden">
+    <div class="hud-top"><div class="hud-brand"><span>✳</span><div>WILDSIGNAL<small id="zone">THE VERDANT BASIN</small></div></div><div class="compass"><div id="compass-labels"></div><span class="compass-needle">▾</span><small id="heading">N · 000°</small></div><div class="storm-clock"><span id="clock-label">STORM ARRIVAL</span><strong id="clock">08:00</strong><i id="storm-indicator"></i></div></div>
+    <div class="objective"><span class="tiny-label">YOUR EXPEDITION</span><h2 id="objective-title">Restore the forest relays</h2><div class="relay-dots"><span id="relay-0"><i></i> GROVE</span><span id="relay-1"><i></i> CROWN</span><span id="relay-2"><i></i> FALLS</span></div><p id="objective-hint">Follow the amber trail to your first relay.</p></div>
+    <button id="menu-button" class="menu-button" aria-label="Pause game">Ⅱ</button>
+    <div id="crosshair"><i></i></div>
+    <div id="waypoint"><span>◇</span><strong id="waypoint-name">THE SUNKEN GROVE</strong><small id="waypoint-distance">120 m</small></div>
+    <div id="interaction" class="hidden"><span class="keycap">E</span><div><strong id="interaction-title">Restore relay</strong><small id="interaction-sub">Hold to tune the signal</small></div><div id="interact-progress"></div></div>
+    <div id="event-toast" class="hidden"><span>◈</span><div><small id="toast-kicker">FIELD NOTE</small><p id="toast-message"></p></div></div>
+    <div id="tutorial"><span class="tutorial-number">01 / FIELD BASICS</span><p id="tutorial-text"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move · Mouse to look · <kbd>Shift</kbd> run</p><button id="dismiss-tutorial" aria-label="Dismiss controls tip">×</button></div>
+    <div class="hud-bottom"><div class="vitals"><div class="vital-label"><span>VITALITY</span><strong id="health-value">100</strong></div><div class="vital-bar"><i id="health-bar"></i></div><div class="vital-label energy-label"><span>◈ RESONANCE</span><strong id="energy-value">100</strong></div><div class="vital-bar energy"><i id="energy-bar"></i></div><div class="stamina-line"><i id="stamina-bar"></i></div><small id="threat-label">The forest is quiet</small></div><div class="ability-bar"><div><kbd>Q</kbd><span>Firefly pulse<small>12 resonance</small></span></div><div><kbd>F</kbd><span>Echo lure<small><b id="lure-count">3</b> remaining</small></span></div><div><kbd>M</kbd><span>Field map<small>Plan your route</small></span></div></div><button id="minimap-button" aria-label="Open field map"><canvas id="minimap" width="260" height="260"></canvas><span>N</span><small>FIELD MAP <b>M</b></small></button></div>
+  </div>
+  <div id="drag-hint" class="hidden">Click to capture mouse · or drag to look</div>
+  <div id="photo-label" class="hidden">FIELD CAMERA <span>Press P to return</span></div>
+  <div id="touch-controls" class="hidden"><div id="move-pad"><i></i></div><div class="touch-actions"><button id="touch-pulse">Pulse</button><button id="touch-lure">Lure</button><button id="touch-interact">Hold E</button><button id="touch-run">Run</button></div></div>
+
+  <div id="modal-backdrop" class="hidden">
+    <section id="pause-modal" class="modal hidden"><p class="eyebrow">TAKE A BREATH</p><h2>The wild can wait.</h2><p>Your expedition is paused.</p><button id="resume" class="primary">Return to the forest <span>→</span></button><button id="map-pause" class="wide-button">Open field map</button><button id="guide-pause" class="wide-button">Field guide</button><button id="settings-pause" class="wide-button">Settings</button><button id="quit" class="text-button">Save & return to title</button></section>
+
+    <section id="guide-modal" class="modal large hidden"><button class="close-modal" aria-label="Close field guide">×</button><p class="eyebrow">THE EXPEDITION HANDBOOK</p><h2>Listen. Light. Leave.</h2><p class="modal-intro">Three relays have gone silent. Wake them, then return to the orange camp beacon to send your rescue signal.</p><div class="guide-grid"><article><span>01 / FIND YOUR WAY</span><h3>Follow the fireflies.</h3><p>Press <kbd>Q</kbd> to send a resonance pulse. A stream of amber fireflies leads toward your selected relay. Press <kbd>M</kbd> to choose a destination.</p></article><article><span>02 / BRING BACK THE LIGHT</span><h3>Wake the old relays.</h3><p>Stand close and hold <kbd>E</kbd> for three seconds. Tuning costs 20 resonance. An awakened relay becomes a safe shelter and recharges your equipment.</p></article><article><span>03 / WATCH WHAT FOLLOWS</span><h3>The storm hears you.</h3><p>Pulsing and sprinting stir the red storm wisps. Keep your distance, or press <kbd>F</kbd> to drop an echo lure. It draws them away for 18 seconds.</p></article><article><span>04 / STAY IN THE WILD</span><h3>A little light goes a long way.</h3><p>Gather luminous blue flowers with <kbd>E</kbd> for vitality, resonance, and another lure. Your resonance slowly recharges by itself.</p></article></div><div class="control-row"><span><kbd>WASD</kbd> Move</span><span><kbd>Shift</kbd> Sprint</span><span><kbd>Space</kbd> Jump</span><span><kbd>Esc</kbd> Pause</span><span><kbd>P</kbd> Photo view</span></div><p class="footnote">Mouse looks around. If mouse capture is unavailable, hold and drag to look. Touch controls appear on phones and tablets. Wander mode has no deadline or damage.</p></section>
+
+    <section id="settings-modal" class="modal hidden"><button class="close-modal" aria-label="Close settings">×</button><p class="eyebrow">MAKE YOURSELF AT HOME</p><h2>Field settings</h2><label class="setting"><span>Graphics quality</span><select id="quality"><option value="low">Performance</option><option value="medium" selected>Balanced</option><option value="high">High</option></select></label><label class="setting"><span>Look sensitivity</span><input id="sensitivity" type="range" min="0.3" max="2" step="0.1" value="1"></label><label class="setting"><span>Ambient sound</span><input id="volume" type="range" min="0" max="1" step="0.05" value="0.55"></label><label class="setting"><span>Invert vertical look</span><input id="invert" type="checkbox"></label><button id="fullscreen" class="wide-button">Toggle fullscreen ↗</button><p class="footnote">If the forest runs slowly, choose Performance. Settings and expedition progress are saved on this device.</p></section>
+
+    <section id="map-modal" class="modal map-modal hidden"><button class="close-modal" aria-label="Close field map">×</button><p class="eyebrow">VERDANT BASIN / SURVEY 01</p><h2>Your way through.</h2><p>Choose a destination. The fireflies will guide you.</p><div class="map-layout"><canvas id="field-map" width="680" height="680" aria-label="Map showing your location and three forest relays"></canvas><div id="map-destinations"></div></div><p class="footnote"><span class="legend-dot amber"></span> Relay <span class="legend-dot green"></span> Restored shelter <span class="legend-dot white"></span> You <span class="legend-dot red"></span> Storm wisp</p></section>
+
+    <section id="credits-modal" class="modal hidden"><button class="close-modal" aria-label="Close about">×</button><p class="eyebrow">ABOUT THIS WORLD</p><h2>Made for the wild.</h2><p>Wildsignal is an original browser expedition inspired by the dense wilderness of Electric Dreams.</p><p>It uses its own terrain, gameplay and world layout, with CC0 scanned materials and plants from <a href="https://polyhaven.com" target="_blank" rel="noopener">Poly Haven</a> and the Three.js renderer.</p><p>The Unreal Engine Electric Dreams project and its UE-only assets are not included. This is a compact browser world, not the original 4 × 4 km environment.</p><a class="wide-button" href="https://www.unrealengine.com/electric-dreams-environment" target="_blank" rel="noopener">Explore the original Electric Dreams ↗</a><a class="text-button" href="./credits.txt" target="_blank">Asset credits & licenses →</a></section>
+
+    <section id="end-modal" class="modal end-modal hidden"><p id="end-kicker" class="eyebrow">TRANSMISSION RECEIVED</p><h2 id="end-title">The forest<br>remembered you.</h2><p id="end-description">Three lights in the dark. One signal home.</p><div class="end-stats"><div><strong id="end-time">05:24</strong><span>EXPEDITION TIME</span></div><div><strong id="end-flowers">0</strong><span>FLOWERS GATHERED</span></div><div><strong id="end-pulses">0</strong><span>FIREFLY PULSES</span></div></div><button id="restart" class="primary">Another expedition <span>↗</span></button><button id="checkpoint" class="wide-button hidden">Retry from your last shelter</button><button id="end-title-button" class="text-button">Return to title →</button></section>
+  </div>
+  <div id="error" class="hidden"><h2>The forest couldn’t load.</h2><p id="error-message">Please enable WebGL in your browser and reload.</p><button onclick="location.reload()">Try again</button></div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
